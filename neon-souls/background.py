@@ -14,3 +14,6 @@ class Background(league.DGameObject):
         self.rect.x = 000
         self.rect.y = 0
         self.static = True
+
+    # def to_string(self):
+    #     return 'layer: {} image: {}, rect: {} x: {} y: {} rect.x: {} rect.y: {}'.format(self._layer, self.image, self.rect, self.x, self.y, self.rect.x, self)

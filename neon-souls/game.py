@@ -9,8 +9,10 @@ from actors import Player
 from physics import GravityManager
 import neon_engine
 import json
+import logging
 
 
+logger = logging.getLogger('Main')
 """
 Copied and modified from example.
 """
@@ -24,6 +26,9 @@ def init_map(engine, player, gravity):
     engine.drawables.add(level1.passable.sprites()) 
     full_background = Background('./assets/skyline-a.png', 0)
     background = Background('./assets/buildings-bg.png', 1)
+
+    logger.info(full_background)
+    logger.info(background)
     engine.drawables.add(full_background)
     engine.drawables.add(background)
     world_size = (level1.wide*league.Settings.tile_size, level1.high*league.Settings.tile_size)
@@ -34,13 +39,17 @@ def init_map(engine, player, gravity):
     # Gravity must be appended first
     engine.objects.append(gravity)
     player.world_size = world_size
-    print(player.image)
     player.rect = player.image.get_rect()
     player.blocks.add(level1.impassable)
     engine.objects.append(player)
     engine.drawables.add(player)
 
 def main():
+    ## Debug Versions
+    
+    logger.info(pygame.version.ver)
+    logger.info(pygame.get_sdl_version())
+
     engine = neon_engine.NeonEngine('Neon Souls')
     
     engine.init_pygame()
@@ -66,6 +75,7 @@ def main():
     engine.physics_functions.append(player.process_gravity)
 
     engine.events[pygame.QUIT] = engine.stop
+    exit(0)
     engine.run()
 
 if __name__=='__main__':
