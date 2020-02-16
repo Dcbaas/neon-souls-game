@@ -75,7 +75,7 @@ def main():
     engine.physics_functions.append(player.process_gravity)
 
     engine.events[pygame.QUIT] = engine.stop
-    exit(0)
+    # exit(0)
     engine.run()
 
 if __name__=='__main__':

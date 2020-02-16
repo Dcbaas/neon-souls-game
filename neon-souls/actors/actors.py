@@ -101,7 +101,7 @@ class Player(ActorBase, GravityBound):
         self.rect.x = self.x
         self.rect.y = self.y
         self.handle_map_collisions()
-        logger.info(self.velocity)
+        # logger.info(self.velocity)
         
         self.x = self.x + self.velocity[0]
         self.y = self.y + self.velocity[1]
