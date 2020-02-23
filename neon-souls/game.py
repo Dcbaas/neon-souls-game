@@ -69,9 +69,9 @@ def init_map(engine, player, gravity, enemy_list):
     engine.drawables.add(flag)
 
     # add background music with map creation
-    ### MUSIC IS BROKEN
-    # pygame.mixer.music.load('assets/Blazer Rail.wav')
-    # pygame.mixer.music.play(-1, 0.0)
+    # music added from: https://www.dl-sounds.com/royalty-free/blazer-rail/
+    pygame.mixer.music.load('sounds/Blazer Rail.wav')
+    pygame.mixer.music.play(-1, 0.0)
 
     for enemy in enemy_list:
         enemy.world_size = world_size
