@@ -16,6 +16,9 @@ from flag import Flag
 import neon_engine
 import json
 import random
+import logging
+
+logger = logging.getLogger('Main')
 
 
 """
@@ -23,7 +26,7 @@ Copied and modified from example.
 game.py initalizes the game and all the objects needed for the game.
 """
 
-def init_map(engine, player, gravity, enemy_list):
+def init_map(engine, player, gravity):
     """
     Loads up all the assets for the game map and 
     background sprites. Updates actors to hold world data. Does an inital render
@@ -73,11 +76,11 @@ def init_map(engine, player, gravity, enemy_list):
     engine.drawables.add(flag)
 
     # add background music with map creation
-    ### MUSIC IS BROKEN
+    ### MUSIC IS BROKEN WON' REPEAT 
     # pygame.mixer.music.load('assets/Blazer Rail.wav')
     # pygame.mixer.music.play(-1, 0.0)
 
-    for enemy in enemy_list:
+    for enemy in engine.enemy_list:
         enemy.world_size = world_size
         enemy.rect = enemy.image.get_rect()
         enemy.blocks.add(level1.impassable)
@@ -85,12 +88,16 @@ def init_map(engine, player, gravity, enemy_list):
         engine.drawables.add(enemy)
         engine.collisions[player].append((enemy, player.take_dmg))
     
-def fire(Neon_Engine, inputs):
+def fire(engine, inputs):
         if inputs['SPACE'] is True:
-            if Neon_Engine.objects[2].check_weapon_cooldown():
-                pr = Neon_Engine.objects[2].loadBullet()
-                Neon_Engine.objects.append(pr)
-                Neon_Engine.drawables.add(pr)
+            if engine.objects[2].check_weapon_cooldown():
+                pr = engine.objects[2].loadBullet()
+                engine.objects.append(pr)
+                engine.drawables.add(pr)
+                pr.kill_function = engine.cleanup_projectile
+                engine.collisions[pr] = []
+                for enemy in engine.enemy_list:
+                    engine.collisions[pr].append((enemy, enemy.get_killed))
                 # Sound effect added from
                 # https://www.zapsplat.com/music/science-fiction-weapon-gun-shoot-powerful-2/
                 pew = pygame.mixer.Sound('assets/laser1.wav')
@@ -130,18 +137,18 @@ def main():
     sentinal_sprites = sentinal_sprites['sprite_list']
 
     player = Player(player_static, player_walking, player_running, (128, 128), 'default', 2, 300, 400)
+    engine.player_instance = player
 
-    enemy_list = []
-    sentinal1 = SentinalEnemy(sentinal_sprites,(70,70),[(400, 500), (600, 500)], 2, 300, 500)
+    sentinal1 = SentinalEnemy(sentinal_sprites,(100,100),[(400, 500), (600, 500)], engine.kill_enemy, 2, 300, 475)
 
-    enemy_list.append(sentinal1)
+    engine.enemy_list.append(sentinal1)
     gravity_manager = GravityManager()
     gravity_manager.add_gravity('default', (0, 15))
 
     gravity_manager.add_object(player)
     
     # create background and level
-    init_map(engine, player, gravity_manager, enemy_list)
+    init_map(engine, player, gravity_manager)
 
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // league.Settings.gameTimeFactor)
     engine.movement_function = player.move_player
@@ -150,7 +157,6 @@ def main():
 
     engine.events[pygame.QUIT] = engine.stop
     engine.run()
-
 
 
 #void main(int argc, char* argv[])...

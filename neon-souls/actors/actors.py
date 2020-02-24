@@ -124,11 +124,6 @@ class Player(ActorBase, GravityBound):
         self.blocks = pygame.sprite.Group()
 
         self.health = Health(3, 1)
-        # self.font = pygame.font.Font('freesansbold.ttf', 32)
-        # logger.info(self.font)
-        # text = '{} HP'.format(self.health.current_health)
-        # logger.info(text)
-        # self.overlay = self.font.render('{}'.format(self.health.current_health), True, (0,0,0))
 
         self.last_tick = pygame.time.get_ticks()
         self.weapon_cooldown = 300
@@ -215,7 +210,6 @@ class Player(ActorBase, GravityBound):
         # it right now
         # self.velocity[0] = self.velocity[0] + gravity_vector[0]
         self.velocity[1] = self.velocity[1] + gravity_vector[1]
-        logger.info(gravity_vector[1])
 
     def get_gravity_name(self):
         """
@@ -271,6 +265,7 @@ class Projectile(ActorBase):
         self.rect.x = x
         self.rect.y = y
         self.facing_left = facing_left
+        self.kill_function = None
 
         if(self.facing_left): 
             self.image = pygame.transform.flip(self.image, True, False)
@@ -295,7 +290,7 @@ class SentinalEnemy(ActorBase):
     hard.
     """
 
-    def __init__(self, sprite_loader_path, image_size, patrol_list, z=0, x=0, y=0, speed=100, layer=5):
+    def __init__(self, sprite_loader_path, image_size, patrol_list, kill_function, z=0, x=0, y=0, speed=100, layer=5):
         """
         Initializes the Sentinal. Unlike the player, the sentinal has only one continusous changing sprite.
         The sentinial has a patrol list which it follows a path to reach every point in the path.
@@ -324,6 +319,8 @@ class SentinalEnemy(ActorBase):
         self.sprite_manager = ConstantAnimatedSprite(sprite_loader_path)
         self.image = self.sprite_manager.get_sprite(self.facing_left)
         self.blocks = pygame.sprite.Group()
+
+        self.kill_function = kill_function
 
     def update(self, deta_game_time):
         """
@@ -382,3 +379,7 @@ class SentinalEnemy(ActorBase):
         self.image = self.sprite_manager.get_sprite(self.facing_left)
         self.image = pygame.transform.scale(self.image, self.image_size)
         # self.rect = self.image.get_rect()
+
+    def get_killed(self, projectile):
+        projectile.kill_function(projectile)
+        self.kill_function(self)
