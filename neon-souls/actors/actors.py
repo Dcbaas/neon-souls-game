@@ -272,9 +272,9 @@ class Projectile(ActorBase):
 
     def update(self, time):
         if( self.facing_left ):
-            self.rect.x = self.rect.x - 8
+            self.rect.x = self.rect.x - 16
         else:
-            self.rect.x = self.rect.x + 8
+            self.rect.x = self.rect.x + 16
 
 class SentinalEnemy(ActorBase):
     """
