@@ -9,10 +9,11 @@ class HealthItem(Item):
         self.heal_amount = 10
 
     def grab(self, player):
-        """Add health to player on collision and play a cool sound!
+        """
+        Add health to player on collision and play a cool sound!
 
         Args:
-            player (actors.Player): instance of player to manipulate upon grabbing item
+        player (actors.Player): instance of player to manipulate upon grabbing item
         """
         player.health.gain_health(self.heal_amount)
         effect = pygame.mixer.Sound('./assets/health-sound.wav')

@@ -6,7 +6,16 @@ import league
 
 
 class Flag(league.DUGameObject):
+    """
+    Creates a final victory game object for the player to run over. The game is 
+    over if the player runs over 
+    """
     def __init__(self, x, y):
+        """
+        Inits the victory item. sets its location and sets won to false.
+
+        param - x,y: the coordinates for the victory item
+        """
         super().__init__(self)
         self._layer = 10
         self.x = x
@@ -21,6 +30,12 @@ class Flag(league.DUGameObject):
         self.image_index_y = 0
 
     def win(self, player):
+        """
+        Called when the player collides with the victory item. Creates a winning
+        icon at the end of the map. 
+
+        param - player: The player colliding with the victory object
+        """
         if not self.won:
             player.health.loss_rate = 0
             self.x -= (league.Settings.width // 3)
@@ -29,6 +44,12 @@ class Flag(league.DUGameObject):
             self.won = True
 
     def update(self, delta_time):
+        """
+        Update function for the victory item
+
+        param - delta_time: The game time that has passed since this function was 
+        last called.
+        """
         if self.won:
             self.rect = self.image.get_rect()
             self.rect.x = self.x
@@ -37,6 +58,9 @@ class Flag(league.DUGameObject):
             self.get_image()
 
     def get_image(self):
+        """
+        TODO: Write comments
+        """
         x = self.image_index_x * self.spritesheet.tile_size
         y = self.image_index_y * self.spritesheet.tile_size
         index = (8 * self.image_index_x - 1) + self.image_index_y

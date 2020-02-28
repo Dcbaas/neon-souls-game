@@ -109,6 +109,9 @@ def fire(engine, inputs):
             pew.play()
 
 def place_random_items(engine, level_size, player):
+    """
+    Randomly places health items around the map
+    """
     rand_start = level_size[0] // 4
     for i in range(2, 6):
         x = random.randrange(rand_start, rand_start * i)

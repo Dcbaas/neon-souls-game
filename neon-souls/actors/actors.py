@@ -258,6 +258,14 @@ class Player(ActorBase, GravityBound):
         return bullet
 
     def take_dmg(self, object):
+        """
+        Function used to take health away from the player. Logs what enemy hit
+        the player. This function is derived from the example in class in that
+        the function will not damage the player if less than a second has passed
+        since the last hit
+
+        param - object: the enemy being collided with
+        """
         now = pygame.time.get_ticks()
         if now - self.last_hit > 1000:
             self.health.lose_health()
@@ -407,5 +415,13 @@ class SentinalEnemy(ActorBase):
         # self.rect = self.image.get_rect()
 
     def get_killed(self, projectile):
+        """
+        Collision function for enemy. If the enemy is hit with a bullet then 
+        the enemy is killed. 
+        This function will also destroy the bullet in the games resouces. 
+        This function also kills this enemy in the resource list. 
+
+        param - projectile: A projectile object killing the enemy
+        """
         projectile.kill_function(projectile)
         self.kill_function(self)
